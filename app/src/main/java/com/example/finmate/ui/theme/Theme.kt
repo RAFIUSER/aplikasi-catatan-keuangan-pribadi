@@ -1,5 +1,7 @@
+// com.example.finmate.ui.theme/Theme.kt
 package com.example.finmate.ui.theme
 
+import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -8,41 +10,38 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 
-// Palet Warna Gelap (Dark Mode)
+// --- Skema Warna ---
+
 private val DarkColorScheme = darkColorScheme(
-    primary = AppYellowDark,
-    onPrimary = AppDarkText,
-    primaryContainer = AppYellow.copy(alpha = 0.2f),
-    onPrimaryContainer = AppDarkText,
-    secondary = BlueShopping,
-    onSecondary = Color.White,
-    background = AppDarkBackground,
-    onBackground = Color.White,
-    surface = AppDarkSurface,
-    onSurface = Color.White
+    primary = FinmateLightYellow,
+    onPrimary = Color.Black,
+    secondary = FinmateYellow,
+    tertiary = Color(0xFF900C3F) // Warna gelap pengganti
 )
 
-// Palet Warna Terang (Light Mode) - INI YANG UTAMA
 private val LightColorScheme = lightColorScheme(
-    primary = AppYellow,                // Kuning Anda sekarang adalah 'primary'
-    onPrimary = AppDarkText,            // Teks di atas 'primary' (kontras)
-    primaryContainer = AppYellow.copy(alpha = 0.2f), // Untuk chip tanggal
-    onPrimaryContainer = AppDarkText,   // Teks di atas chip
-    secondary = BlueShopping,           // Warna aksen (opsional)
-    onSecondary = Color.White,          // Teks di atas aksen
-    background = AppScreenBackground,   // Background abu-abu
-    onBackground = AppDarkText,         // Teks di atas background
-    surface = AppCardBackground,        // Background Card (putih)
-    onSurface = AppDarkText             // Teks di atas Card
+    primary = FinmateYellow,
+    onPrimary = Color.Black,
+    secondary = FinmateLightYellow,
+    tertiary = Color(0xFFFF5733), // Warna terang pengganti
+    background = Color(0xFFFFFFFF),
+    surface = Color(0xFFFFFFFF),
+    onBackground = Color(0xFF1C1B1F),
+    onSurface = Color(0xFF1C1B1F),
 )
+
+// --- Komponen Tema ---
 
 @Composable
-fun FinMateTheme(
+fun FinmateTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color di-nonaktifkan agar tema kustom kita yang dipakai
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
@@ -55,9 +54,21 @@ fun FinMateTheme(
         else -> LightColorScheme
     }
 
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as Activity).window
+            colorScheme.primary.toArgb().also {
+                @Suppress("DEPRECATION")
+                window.statusBarColor = it
+            }
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+        }
+    }
+
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = Typography, // Pastikan Typography ada di ui.theme/Type.kt
         content = content
     )
 }

@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +33,7 @@ val categoryIcons = mapOf(
 @Composable
 fun ExpenseItem(category: ExpenseCategory, total: Float) {
     // Ikon berdasarkan nama, default ke 'Help' jika tidak ketemu
-    val icon = categoryIcons[category.name] ?: Icons.Default.Help
+    val icon = categoryIcons[category.name] ?: Icons.AutoMirrored.Filled.Help
 
     // Menghitung persentase untuk progress bar
     val progress = category.amount / total
@@ -72,13 +74,14 @@ fun ExpenseItem(category: ExpenseCategory, total: Float) {
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 LinearProgressIndicator(
-                    progress = progress,
+                    progress = { progress },
+                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(8.dp)
+                                        .clip(RoundedCornerShape(4.dp)),
                     color = category.color,
                     trackColor = Color.Gray.copy(alpha = 0.2f),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(8.dp)
-                        .clip(RoundedCornerShape(4.dp))
+                    strokeCap = ProgressIndicatorDefaults.LinearStrokeCap,
                 )
             }
 
