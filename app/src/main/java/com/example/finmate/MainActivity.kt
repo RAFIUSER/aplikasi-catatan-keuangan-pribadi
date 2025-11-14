@@ -8,13 +8,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.finmate.ui.screen.dashboard.DashboardScreen
-import com.example.finmate.ui.theme.FinMateTheme
+import com.example.finmate.ui.theme.FinmateTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            FinMateTheme { // Gunakan tema Anda
+            FinmateTheme { // Gunakan tema Anda
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
